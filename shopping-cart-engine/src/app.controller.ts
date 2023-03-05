@@ -17,18 +17,18 @@ export class AppController {
 
   @MessagePattern('create-cart')
   async createCart(@Payload() data: any): Promise<CartEntity> {
-    this.logger.log(`User: ${JSON.stringify(data)}`);
+    this.logger.log(`Cart: ${JSON.stringify(data)}`);
     return await this.appService.createCart(data);
   }
 
   @MessagePattern('create-product')
   async createProduct(@Payload() data: any): Promise<ProductEntity> {
-    this.logger.log(`User: ${JSON.stringify(data)}`);
+    this.logger.log(`Product: ${JSON.stringify(data)}`);
     return await this.appService.createProduct(data);
   }
 
   @MessagePattern('delete-product')
   async deleteProduct(@Payload() data: any): Promise<void> {
-    return this.appService.deleteProduct(Number(data.value.id));
+    return this.appService.deleteProduct(Number(data.id));
   }
 }

@@ -5,11 +5,13 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 //import { TypeOrmModule } from '@nestjs/typeorm';
 import { CartsModule } from './carts/carts.module';
+import { ProductsModule } from './products/products.module';
 
 @Module({
   imports: [
     UsersModule,
     CartsModule,
+    ProductsModule,
     /*TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',

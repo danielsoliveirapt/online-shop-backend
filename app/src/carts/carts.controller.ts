@@ -15,7 +15,7 @@ import { CartsDto } from './carts.dto';
 import { Products } from './products.interface';
 import { ProductsDto } from './products.dto';
 
-@Controller('carts')
+@Controller(['carts'])
 export class CartsController implements OnModuleInit {
   @Client({
     transport: Transport.KAFKA,
@@ -57,13 +57,13 @@ export class CartsController implements OnModuleInit {
     return this.client.send('create-cart', user);
   }
 
-  @Post('/addProduct')
+  @Post('/products')
   @ApiBody({ type: ProductsDto })
   createProduct(@Body() product: ProductsDto): Observable<Products> {
     return this.client.send('create-product', product);
   }
 
-  @Delete('/removeProduct/:id')
+  @Delete('/products/:id')
   deleteProduct(@Param('id') id: number) {
     return this.client.emit('delete-product', { id });
   }

@@ -2,6 +2,7 @@ import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { AppModule } from './app.module';
+import { ConfigService } from '@nestjs/config';
 
 const logger = new Logger('Main');
 
@@ -22,6 +23,7 @@ async function bootstrap() {
       },
     },
   );
+  const configService = app.get(ConfigService);
   //await app.listen(() => logger.log('user-engine is running'));
   await app.listen();
   console.log('products-engine is running');

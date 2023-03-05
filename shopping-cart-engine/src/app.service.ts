@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CartEntity } from './carts.entity';
@@ -12,7 +12,7 @@ export class AppService {
     @InjectRepository(CartEntity)
     private cartRepository: Repository<CartEntity>,
 
-    @InjectRepository(CartEntity)
+    @InjectRepository(ProductEntity)
     private productRepository: Repository<ProductEntity>,
   ) {}
 
@@ -25,11 +25,15 @@ export class AppService {
   }
 
   async createCart(cart: Cart): Promise<CartEntity> {
-    return await this.cartRepository.save(cart);
+    return await this.cartRepository.save(cart).catch((e) => {
+      throw new NotFoundException(e.cart);
+    });
   }
 
   async createProduct(product: Product): Promise<ProductEntity> {
-    return await this.productRepository.save(product);
+    return await this.productRepository.save(product).catch((e) => {
+      throw new NotFoundException(e.product);
+    });
   }
 
   async deleteProduct(id: number): Promise<void> {

@@ -1,0 +1,1 @@
+start project debug mode: npm run start:dev

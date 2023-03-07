@@ -1,7 +1,8 @@
-import { Controller, Get, OnModuleInit } from '@nestjs/common';
+import { Controller, Get, OnModuleInit, UseGuards } from '@nestjs/common';
 import { Client, ClientKafka, Transport } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
 import { Products } from './products.interface';
+import { JwtAuthGuard } from '../jwt-auth.guard';
 
 @Controller(['products'])
 export class ProductsController implements OnModuleInit {
@@ -29,6 +30,7 @@ export class ProductsController implements OnModuleInit {
     });
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get()
   findAllProducts(): Observable<Products[]> {
     return this.client.send('find-all-products', {});

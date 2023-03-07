@@ -6,9 +6,12 @@ import { UsersModule } from './users/users.module';
 //import { TypeOrmModule } from '@nestjs/typeorm';
 import { CartsModule } from './carts/carts.module';
 import { ProductsModule } from './products/products.module';
+import { PassportModule } from '@nestjs/passport';
+import { JwtStrategy } from './jwt.strategy';
 
 @Module({
   imports: [
+    PassportModule,
     UsersModule,
     CartsModule,
     ProductsModule,
@@ -25,6 +28,6 @@ import { ProductsModule } from './products/products.module';
     }),*/
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, JwtStrategy],
 })
 export class AppModule {}

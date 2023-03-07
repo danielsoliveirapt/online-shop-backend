@@ -14,6 +14,11 @@ export class AppController {
     return this.appService.findAll();
   }
 
+  @MessagePattern('auth-user')
+  async auth(@Payload() data: any) {
+    return await this.appService.auth(data.username, data.password);
+  }
+
   @MessagePattern('create-user')
   async create(@Payload() data: any): Promise<UserEntity> {
     this.logger.log(`User: ${JSON.stringify(data)}`);

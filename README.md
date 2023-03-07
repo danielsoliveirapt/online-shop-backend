@@ -7,7 +7,7 @@
 ## Documentação
 - A documentação do projeto foi gerada através do Swagger e está disponível no endereço: http://localhost:8000/api/
 
-![swagger](https://i.imgur.com/SdQGIHd.png)
+![swagger](https://i.imgur.com/oNSFw8N.png)
 
 ## Autor
 

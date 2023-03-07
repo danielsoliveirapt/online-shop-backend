@@ -28,7 +28,7 @@ export class AppController {
   }
 
   @MessagePattern('delete-product')
-  async deleteProduct(@Payload() data: any): Promise<void> {
+  async deleteProduct(@Payload() data: any) {
     return this.appService.deleteProduct(Number(data.id));
   }
 }

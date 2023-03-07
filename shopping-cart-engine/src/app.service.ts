@@ -31,12 +31,56 @@ export class AppService {
   }
 
   async createProduct(product: Product): Promise<ProductEntity> {
-    return await this.productRepository.save(product).catch((e) => {
-      throw new NotFoundException(e.product);
-    });
+    const productSave = await this.productRepository.save(product);
+    //atualiza os campos totalPrice e totalQuantity do carrinho de compras
+    const totals = await ProductEntity.createQueryBuilder('products')
+      .select('SUM(quantity)', 'quantity')
+      .addSelect('SUM(price)', 'price')
+      .where('"cartShoppingCartId" = :id', {
+        id: productSave.cartShoppingCartId,
+      })
+      .getRawOne();
+
+    await ProductEntity.createQueryBuilder('products')
+      .update(CartEntity)
+      .set({
+        totalQuantity: totals.quantity,
+        totalPrice: totals.price,
+      })
+      .where('shoppingCartId = :id', { id: productSave.cartShoppingCartId })
+      .execute();
+
+    return productSave;
   }
 
-  async deleteProduct(id: number): Promise<void> {
-    await this.productRepository.delete({ id });
+  async deleteProduct(id: number) {
+    const queryProduct = await ProductEntity.createQueryBuilder('products')
+      .select('"cartShoppingCartId"', 'cartShoppingCartId')
+      .where('id=:id', { id: id })
+      .getRawOne();
+    if (!queryProduct) {
+      return 'No Record Found';
+    } else {
+      await this.productRepository.delete({ id });
+
+      const totals = await ProductEntity.createQueryBuilder('products')
+        .select('SUM(quantity)', 'quantity')
+        .addSelect('SUM(price)', 'price')
+        .where('"cartShoppingCartId" = :id', {
+          id: queryProduct.cartShoppingCartId,
+        })
+        .getRawOne();
+
+      await ProductEntity.createQueryBuilder('products')
+        .update(CartEntity)
+        .set({
+          totalQuantity: totals.quantity,
+          totalPrice: totals.price,
+        })
+        .where('shoppingCartId = :id', { id: queryProduct.cartShoppingCartId })
+        .execute();
+
+      return 'Record Successful Deleted';
+    }
   }
 }
